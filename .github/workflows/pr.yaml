@@ -16,7 +16,6 @@ jobs:
               run: |
                 GIT_VERSION=${GIT_VERSION:=$(git describe --always --tags --long --dirty | sed -e 's/\-0//' -e 's/\-g.......//')}
 
-                echo "[INFO] DOCKER_IMAGE_NAME $DOCKER_IMAGE_NAME"
                 echo "[INFO] GIT_VERSION: $GIT_VERSION"
 
                 echo "[INFO] docker build \
@@ -29,5 +28,5 @@ jobs:
                     .
             - name: test
               run: |
-                - echo "[INFO] docker run ${GITHUB_REPOSITORY}:${GIT_VERSION}"
-                - docker run ${GITHUB_REPOSITORY}:${GIT_VERSION}
+                echo "[INFO] docker run ${GITHUB_REPOSITORY}:${GIT_VERSION}"
+                docker run ${GITHUB_REPOSITORY}:${GIT_VERSION}
