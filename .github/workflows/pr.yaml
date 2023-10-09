@@ -14,7 +14,7 @@ jobs:
                 fetch-depth: "0"
             - name: Build Docker container
               run: |
-                export GIT_VERSION=${GIT_VERSION:=$(git describe --always --tags --long --dirty | sed -e 's/\-0//' -e 's/\-g.......//')}
+                GIT_VERSION=${GIT_VERSION:=$(git describe --always --tags --long --dirty | sed -e 's/\-0//' -e 's/\-g.......//')}
 
                 echo "[INFO] GIT_VERSION: $GIT_VERSION"
 
@@ -28,5 +28,6 @@ jobs:
                     .
             - name: test
               run: |
+                GIT_VERSION=${GIT_VERSION:=$(git describe --always --tags --long --dirty | sed -e 's/\-0//' -e 's/\-g.......//')}
                 echo "[INFO] docker run ${GITHUB_REPOSITORY}:${GIT_VERSION}"
                 docker run ${GITHUB_REPOSITORY}:${GIT_VERSION}
