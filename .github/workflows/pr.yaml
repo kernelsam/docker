@@ -14,11 +14,9 @@ jobs:
                 fetch-depth: "0"
             - name: Build Docker container
               run: |
-                GIT_REPOSITORY_NAME=$(echo $(git remote get-url origin) | cut -f2 -d:)
-                DOCKER_IMAGE_NAME=${GIT_REPOSITORY_NAME%.*}
+                DOCKER_IMAGE_NAME=kernelsam/docker
                 GIT_VERSION=${GIT_VERSION:=$(git describe --always --tags --long --dirty | sed -e 's/\-0//' -e 's/\-g.......//')}
 
-                echo "[INFO] GIT_REPOSITORY_NAME: $GIT_REPOSITORY_NAME"
                 echo "[INFO] DOCKER_IMAGE_NAME $DOCKER_IMAGE_NAME"
                 echo "[INFO] GIT_VERSION: $GIT_VERSION"
 
