@@ -14,21 +14,20 @@ jobs:
                 fetch-depth: "0"
             - name: Build Docker container
               run: |
-                DOCKER_IMAGE_NAME=kernelsam/docker
                 GIT_VERSION=${GIT_VERSION:=$(git describe --always --tags --long --dirty | sed -e 's/\-0//' -e 's/\-g.......//')}
 
                 echo "[INFO] DOCKER_IMAGE_NAME $DOCKER_IMAGE_NAME"
                 echo "[INFO] GIT_VERSION: $GIT_VERSION"
 
                 echo "[INFO] docker build \
-                --tag ${DOCKER_IMAGE_NAME} \
-                --tag ${DOCKER_IMAGE_NAME}:${GIT_VERSION} \
+                --tag ${GITHUB_REPOSITORY} \
+                --tag ${GITHUB_REPOSITORY}:${GIT_VERSION} \
                 ."
                 docker build \
-                    --tag ${DOCKER_IMAGE_NAME} \
-                    --tag ${DOCKER_IMAGE_NAME}:${GIT_VERSION} \
+                    --tag ${GITHUB_REPOSITORY} \
+                    --tag ${GITHUB_REPOSITORY}:${GIT_VERSION} \
                     .
             - name: test
               run: |
-                - echo "[INFO] docker run ${DOCKER_IMAGE_NAME}:${GIT_VERSION}"
-                - docker run ${DOCKER_IMAGE_NAME}:${GIT_VERSION}
+                - echo "[INFO] docker run ${GITHUB_REPOSITORY}:${GIT_VERSION}"
+                - docker run ${GITHUB_REPOSITORY}:${GIT_VERSION}
