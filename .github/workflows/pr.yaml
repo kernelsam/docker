@@ -1,0 +1,26 @@
+name: pr
+
+on:
+    pull_request:
+      branches:
+        - main
+jobs:
+    docker-build-container:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+              with:
+                fetch-depth: "0"
+            - name: Build Docker container
+              run: |
+                GIT_REPOSITORY_NAME=${GIT_REPOSITORY_NAME:=$(basename `git rev-parse --show-toplevel`)}
+                GIT_VERSION=${GIT_VERSION:=$(git describe --always --tags --long --dirty | sed -e 's/\-0//' -e 's/\-g.......//')}
+                docker build \
+                    --tag ${DOCKER_IMAGE_NAME} \
+                    --tag ${DOCKER_IMAGE_NAME}:${GIT_VERSION} \
+                    .
+            - name: test
+              run: |
+                - echo "[INFO] docker run ${DOCKER_IMAGE_NAME}:${GIT_VERSION}"
+                - docker run ${DOCKER_IMAGE_NAME}:${GIT_VERSION}
