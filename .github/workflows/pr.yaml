@@ -1,0 +1,39 @@
+name: pr
+
+on:
+    pull_request:
+      branches:
+        - main
+jobs:
+    docker-build-container:
+        runs-on: ubuntu-latest
+        permissions:
+            id-token: write # This is required for requesting the JWT
+            contents: read  # This is required for actions/checkout
+        steps:
+
+            - name: Checkout repository
+              uses: actions/checkout@v4
+              with:
+                fetch-depth: "0"
+            
+            - name: Configure AWS Credentials
+              uses: aws-actions/configure-aws-credentials@v4
+              with:
+                  role-to-assume: arn:aws:iam::897910034638:role/skern-github-actions-test
+                  role-session-name: GitHub_to_AWS_via_FederatedOIDC
+                  aws-region: us-east-1
+
+            - name: Login to Amazon ECR
+              id: login-ecr
+              uses: aws-actions/amazon-ecr-login@v2
+
+            - name: Build, tag, and push docker image to Amazon ECR
+              env:
+                REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+                REPOSITORY: skern-test
+                IMAGE_TAG: ${{ github.sha }}
+              run: |
+                docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
+                docker run $REGISTRY/$REPOSITORY:$IMAGE_TAG
+                docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
