@@ -24,7 +24,7 @@ jobs:
             - name: Configure AWS Credentials
               uses: aws-actions/configure-aws-credentials@v4
               with:
-                  role-to-assume: arn:aws:iam::897910034638:role/skern-github-actions-test
+                  role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/skern-github-actions-test
                   role-session-name: GitHub_to_AWS_via_FederatedOIDC
                   aws-region: us-east-1
 
