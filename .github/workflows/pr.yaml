@@ -22,7 +22,7 @@ jobs:
                 fetch-depth: "0"
             
             - name: Configure AWS Credentials
-              uses: aws-actions/configure-aws-credentials@v4
+              uses: aws-actions/configure-aws-credentials@v5
               with:
                   role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/skern-github-actions-test
                   role-session-name: GitHub_to_AWS_via_FederatedOIDC
